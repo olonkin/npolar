@@ -2,8 +2,9 @@ from datetime import datetime
 import urllib.request, json
 
 class expedition:
-    def __init__(self, id, programs, first, last):
+    def __init__(self, id, conveyance, programs, first, last):
         self.id = id
+        self.conveyance = conveyance
         self.programs = programs
         self.first_sample = first
         self.last_sample = last
@@ -21,7 +22,7 @@ expeditions: list[expedition] = []
 for sample in samples:
     existing = next((x for x in expeditions if x.id == sample['expedition']), None)
     if existing is None:
-        expeditions.append(expedition(sample['expedition'], sample['programs'], sample['utc_date'], sample['utc_date']))
+        expeditions.append(expedition(sample['expedition'], sample['conveyance'], sample.get('programs'), sample['utc_date'], sample['utc_date']))
     elif existing.last_sample < sample['utc_date']:
         existing.last_sample = sample['utc_date']
     elif existing.first_sample > sample['utc_date']:
